@@ -48,7 +48,7 @@ def loged_in_user(user):
         elif choice == "3":
             update_expenses(user)
         elif choice == "4":
-            pass
+            delete_expense(user)
         elif choice == "5":
             print("You have been logged out.")
             break
@@ -139,3 +139,29 @@ def update_expenses(user):
 
     session.commit()
     print("Expense updated")
+
+
+def delete_expense(user):
+    print("Deleting an expense:")
+
+    expenses = session.query(Expense).filter_by(user_id=user.id).all()
+    if not expenses:
+        print("No expenses to delete.")
+        return
+
+    print("Select an expense to delete:")
+    for expense in expenses:
+        print(
+            f"ID: {expense.id}, Amount: {expense.amount}, Description: {expense.description}"
+        )
+
+    expense_id = input("Enter the ID of the expense you want to delete: ")
+
+    expense_to_delete = session.query(Expense).get(expense_id)
+    if not expense_to_delete:
+        print("Invalid expense ID.")
+        return
+
+    session.delete(expense_to_delete)
+    session.commit()
+    print("Expense deleted.")
