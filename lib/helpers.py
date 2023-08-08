@@ -24,33 +24,72 @@ def login_user():
     user = authenticate_user(username, password)
     if user:
         print("Login successful!")
+        loged_in_user(user)
     else:
         print("Invalid username or password.")
 
 
-def add_expense(user, amount, description, date, category_name):
-    category = session.query(Category).filter_by(name=category_name).first()
-    if not category:
-        category = Category(name=category_name)
-        session.add(category)
+def loged_in_user(user):
+    print(f"Welcome, {user.username}!")
+    while True:
+        print("Main menu ")
+        print("1: Add an expense ")
+        print("2: View your expenses ")
+        print("3: update your expenses ")
+        print("4: Delete an expense ")
+        print("5: Log out ")
+
+        choice = input("Please select an option :")
+
+        if choice == "1":
+            add_expense(user)
+        elif choice == "2":
+            pass
+        elif choice == "3":
+            pass
+        elif choice == "4":
+            pass
+        elif choice == "5":
+            print("You have been logged out.")
+            break
+        else:
+            print("Please choose one of the 5 options.")
+
+
+def add_expense(user):
+    print("Adding an expense: ")
+    amount = float(input("Enter the amount: "))
+    description = input("Enter a description: ")
+    date = input("Enter the date (MM/DD): ")
+
+    categories = session.query(Category).all()
+    print("Available Categories: ")
+    for category in categories:
+        print(f"{category.id} : {category.name}")
+
+    print("0 : Add a new category")
+    category_id = int(input("Select a Categoty ID: '"))
+
+    if category_id == 0:
+        new_category_name = input("Enter the name of the new category: ")
+        new_category = Category(name=new_category_name)
+        session.add(new_category)
         session.commit()
+        selected_category = new_category
+    else:
+        selected_category = session.query(Category).get(category_id)
 
-    expense = Expense(
-        amount=amount, description=description, date=date, category=category, user=user
+        if not selected_category:
+            print("Invalid category ID, expense not added.")
+
+    new_expense = Expense(
+        amount=amount,
+        description=description,
+        date=date,
+        category=selected_category,
+        user=user,
     )
-    session.add(expense)
+
+    session.add(new_expense)
     session.commit()
-    print("Expense added successfully!")
-
-
-def list_expenses(user):
-    expenses = session.query(Expense).filter_by(user=user).all()
-    if not expenses:
-        print("No expenses found.")
-        return
-
-    print("List of Expenses:")
-    for expense in expenses:
-        print(
-            f"Amount: {expense.amount}, Description: {expense.description}, Date: {expense.date}, Category: {expense.category.name}"
-        )
+    print("Expense added.")

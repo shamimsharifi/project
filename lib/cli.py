@@ -1,20 +1,12 @@
 from db.models import session
-from helpers import (
-    register_user,
-    authenticate_user,
-    login_user,
-    add_expense,
-    list_expenses,
-)
+from helpers import register_user, login_user, loged_in_user
 
 
 def main_menu():
     while True:
         print("1. Register")
         print("2. Login")
-        print("3. Add Expense")
-        print("4. List Expenses")
-        print("5. Exit")
+        print("3. Exit")
         choice = input("Select an option: ")
 
         if choice == "1":
@@ -25,23 +17,13 @@ def main_menu():
                 print("Registration successful!")
             else:
                 print("Username already taken.")
+                break
 
         elif choice == "2":
             login_user()
+            break
 
         elif choice == "3":
-            user = authenticate_user(...)  # Authenticate the user
-            amount = float(input("Enter the expense amount: "))
-            description = input("Enter the expense description: ")
-            date = input("Enter the expense date (YYYY-MM-DD): ")
-            category = input("Enter the expense category: ")
-            add_expense(user, amount, description, date, category)
-
-        elif choice == "4":
-            user = authenticate_user(...)  # Authenticate the user
-            list_expenses(user)
-
-        elif choice == "5":
             break
 
         else:
