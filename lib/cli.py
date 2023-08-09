@@ -1,10 +1,14 @@
 from db.models import session
 from helpers import register_user, login_user, loged_in_user
-import logging
+import pyfiglet
 
 
 def main_menu():
-    logging.getLogger("sqlalchemy").setLevel(logging.ERROR)
+    text = "Expense Ease"
+    font_style = "slant"
+
+    print(pyfiglet.figlet_format(text, font=font_style))
+
     while True:
         print("\033[48;5;236m\033[38;5;123m1. \033[38;5;208mRegister\033[0;0m")
         print("\033[48;5;236m\033[38;5;123m2. \033[38;5;208mLogin\033[0;0m")
