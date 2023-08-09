@@ -38,7 +38,7 @@ class Expense(Base):
 
 
 # Create the database engine
-engine = create_engine("sqlite:///mydb.db", echo=True)
+engine = create_engine("sqlite:///mydb.db", echo=False)
 Base.metadata.create_all(bind=engine)
 
 Session = sessionmaker(bind=engine)
